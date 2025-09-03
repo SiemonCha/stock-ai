@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  # Stock AI API Service
+  stockai-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: stockai-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-stock-ai-secret-change-in-production}
+      - STOCK_AI_API_KEY=${STOCK_AI_API_KEY:-demo-api-key}
+      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgresql://stockai:password@postgres:5432/stockai
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - stockai-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: stockai-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - stockai-network
+    command: redis-server --appendonly yes
+
+  # PostgreSQL for data storage
+  postgres:
+    image: postgres:15-alpine
+    container_name: stockai-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=stockai
+      - POSTGRES_USER=stockai
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - stockai-network
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: stockai-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/ssl/certs:ro
+    depends_on:
+      - stockai-api
+    networks:
+      - stockai-network
+
+volumes:
+  redis_data:
+    driver: local
+  postgres_data:
+    driver: local
+
+networks:
+  stockai-network:
+    driver: bridge
