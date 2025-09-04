@@ -1,7 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras.models import Model, Sequential
 from tensorflow.keras.layers import *
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam, AdamW
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 import numpy as np
 import pandas as pd
@@ -9,15 +9,26 @@ from typing import Tuple, Dict, List, Optional
 from sklearn.preprocessing import MinMaxScaler
 import joblib
 import os
+import sys
+
+# Import advanced models
+try:
+    from ..ai.advanced_models import NextGenEnsembleModel, AdvancedTrainingSystem
+    from ..ai.advanced_models import AdvancedEnsembleModel
+except ImportError:
+    print("Advanced models not available, using basic models only")
 
 class UnifiedStockModels:
     """
-    Unified model system containing all model architectures
+    Unified model system containing all model architectures including next-gen models
     """
-    def __init__(self):
+    def __init__(self, use_advanced=True):
         self.models = {}
         self.scalers = {}
         self.history = {}
+        self.use_advanced = use_advanced
+        self.advanced_ensemble = None
+        self.nextgen_ensemble = None
         
     def create_lstm_model(self, sequence_length: int, n_features: int, 
                          units: List[int] = [64, 32], dropout_rate: float = 0.2) -> Model:
@@ -290,38 +301,190 @@ class UnifiedStockModels:
         scaler_path = os.path.join(base_path, 'scalers.pkl')
         if os.path.exists(scaler_path):
             self.scalers = joblib.load(scaler_path)
+    
+    def create_nextgen_ensemble(self, sequence_length: int, n_features: int, 
+                               config: Optional[Dict] = None) -> 'NextGenEnsembleModel':
+        """Create next-generation ensemble model"""
+        if not self.use_advanced:
+            raise ValueError("Advanced models not enabled")
+        
+        try:
+            if config is None:
+                config = {
+                    'sequence_length': sequence_length,
+                    'n_features': n_features,
+                    'dropout_rate': 0.3,
+                    'learning_rate': 0.001
+                }
+            
+            self.nextgen_ensemble = NextGenEnsembleModel(**config)
+            return self.nextgen_ensemble.build_advanced_ensemble()
+        except NameError:
+            print("NextGenEnsembleModel not available, falling back to basic ensemble")
+            return self.create_ensemble_model(sequence_length, n_features)
+    
+    def create_advanced_ensemble(self, sequence_length: int, n_features: int,
+                                config: Optional[Dict] = None) -> 'AdvancedEnsembleModel':
+        """Create advanced ensemble with uncertainty quantification"""
+        if not self.use_advanced:
+            raise ValueError("Advanced models not enabled")
+        
+        try:
+            if config is None:
+                config = {
+                    'sequence_length': sequence_length,
+                    'n_features': n_features
+                }
+            
+            self.advanced_ensemble = AdvancedEnsembleModel(**config)
+            return self.advanced_ensemble.build_ensemble_model()
+        except NameError:
+            print("AdvancedEnsembleModel not available, falling back to basic ensemble")
+            return self.create_ensemble_model(sequence_length, n_features)
+    
+    def train_advanced_ensemble(self, model_type: str, X_train: np.ndarray, y_train: np.ndarray,
+                               X_val: np.ndarray, y_val: np.ndarray, epochs: int = 100,
+                               config: Optional[Dict] = None) -> Dict:
+        """Train advanced ensemble models with sophisticated techniques"""
+        
+        if model_type == 'nextgen_ensemble':
+            if self.nextgen_ensemble is None:
+                self.create_nextgen_ensemble(X_train.shape[1], X_train.shape[2], config)
+            
+            # Use advanced training system
+            trainer = AdvancedTrainingSystem(self.nextgen_ensemble)
+            history = trainer.train_with_advanced_techniques(
+                X_train, y_train, X_val, y_val, epochs
+            )
+            
+            self.models['nextgen_ensemble'] = self.nextgen_ensemble
+            self.history['nextgen_ensemble'] = history.history if hasattr(history, 'history') else history
+            
+            return self.history['nextgen_ensemble']
+        
+        elif model_type == 'advanced_ensemble':
+            if self.advanced_ensemble is None:
+                self.create_advanced_ensemble(X_train.shape[1], X_train.shape[2], config)
+            
+            history = self.advanced_ensemble.train_ensemble(
+                X_train, y_train, X_val, y_val, epochs
+            )
+            
+            self.models['advanced_ensemble'] = self.advanced_ensemble
+            self.history['advanced_ensemble'] = history
+            
+            return history
+        
+        else:
+            # Fall back to standard training
+            return self.train_model(model_type, X_train, y_train, X_val, y_val, epochs)
+    
+    def predict_with_uncertainty(self, model_type: str, X: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """Make predictions with uncertainty estimates"""
+        
+        if model_type == 'advanced_ensemble' and self.advanced_ensemble:
+            return self.advanced_ensemble.predict_with_uncertainty(X)
+        
+        elif model_type == 'nextgen_ensemble' and self.nextgen_ensemble:
+            # NextGen model prediction with uncertainty
+            predictions = self.nextgen_ensemble.predict(X)
+            if isinstance(predictions, list) and len(predictions) >= 2:
+                return predictions[0], predictions[1]
+            else:
+                # Fallback to basic prediction
+                return predictions, np.zeros_like(predictions)
+        
+        else:
+            # Standard prediction without uncertainty
+            predictions = self.predict(model_type, X)
+            return predictions, np.zeros_like(predictions)
 
 class DataProcessor:
     """
-    Unified data processing system
+    Enhanced data processing system with intelligent feature engineering
     """
-    def __init__(self, sequence_length: int = 60):
+    def __init__(self, sequence_length: int = 60, feature_level: str = 'standard'):
         self.sequence_length = sequence_length
         self.scaler = MinMaxScaler()
         self.feature_columns = None
+        self.feature_level = feature_level  # 'standard', 'advanced', 'intelligent', 'all'
+        self.feature_engine = None
+        
+        # Initialize intelligent feature engine if advanced features requested
+        if feature_level in ['advanced', 'intelligent', 'all']:
+            try:
+                from ..data.intelligent_features import IntelligentFeatureEngine
+                self.feature_engine = IntelligentFeatureEngine()
+            except ImportError:
+                print("Warning: Intelligent features not available, using standard features")
+                self.feature_level = 'standard'
         
     def prepare_data(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Prepare data with technical indicators"""
+        """Enhanced data preparation with multiple feature levels"""
         import ta
         
         data = df.copy()
         
-        # Basic technical indicators
-        data['sma_20'] = ta.trend.sma_indicator(data['Close'], window=20)
-        data['sma_50'] = ta.trend.sma_indicator(data['Close'], window=50)
-        data['rsi'] = ta.momentum.rsi(data['Close'], window=14)
-        data['macd'] = ta.trend.macd_diff(data['Close'])
-        data['macd_signal'] = ta.trend.macd_signal(data['Close'])
-        data['bb_upper'] = ta.volatility.bollinger_hband(data['Close'])
-        data['bb_lower'] = ta.volatility.bollinger_lband(data['Close'])
+        # Ensure proper column names (handle case variations)
+        column_mapping = {}
+        for col in data.columns:
+            if col.lower() in ['close', 'high', 'low', 'open', 'volume']:
+                column_mapping[col] = col.capitalize()
         
-        # Volume indicators  
-        data['volume_sma'] = ta.volume.volume_sma(data['Close'], data['Volume'], window=20)
+        if column_mapping:
+            data = data.rename(columns=column_mapping)
         
-        # Price features
-        data['price_change'] = data['Close'].pct_change()
-        data['volatility'] = data['price_change'].rolling(window=20).std()
-        data['high_low_ratio'] = data['High'] / data['Low']
+        # Standard features (always included)
+        if 'Close' in data.columns:
+            # Basic technical indicators
+            data['sma_20'] = ta.trend.sma_indicator(data['Close'], window=20)
+            data['sma_50'] = ta.trend.sma_indicator(data['Close'], window=50)
+            data['rsi'] = ta.momentum.rsi(data['Close'], window=14)
+            data['macd'] = ta.trend.macd_diff(data['Close'])
+            data['macd_signal'] = ta.trend.macd_signal(data['Close'])
+            data['bb_upper'] = ta.volatility.bollinger_hband(data['Close'])
+            data['bb_lower'] = ta.volatility.bollinger_lband(data['Close'])
+            
+            # Price features
+            data['price_change'] = data['Close'].pct_change()
+            data['volatility'] = data['price_change'].rolling(window=20).std()
+            
+            if 'High' in data.columns and 'Low' in data.columns:
+                data['high_low_ratio'] = data['High'] / data['Low']
+            
+            # Volume indicators (if volume available)
+            if 'Volume' in data.columns:
+                data['volume_sma'] = ta.volume.volume_sma(data['Close'], data['Volume'], window=20)
+        
+        # Advanced features
+        if self.feature_level in ['advanced', 'intelligent', 'all'] and self.feature_engine:
+            try:
+                # Add market microstructure features
+                data = self.feature_engine.add_market_microstructure_features(data)
+                
+                # Add advanced technical indicators
+                data = self.feature_engine.add_advanced_technical_indicators(data)
+                
+                if self.feature_level in ['intelligent', 'all']:
+                    # Add behavioral finance features
+                    data = self.feature_engine.add_behavioral_finance_features(data)
+                    
+                    # Add regime detection features
+                    data = self.feature_engine.add_regime_adaptive_features(data)
+                    
+                    # Add quantum-inspired features
+                    data = self.feature_engine.add_quantum_inspired_features(data)
+                
+                if self.feature_level == 'all':
+                    # Add fractal and chaos features (computationally intensive)
+                    data = self.feature_engine.add_fractal_and_chaos_features(data)
+                    
+                    # Add support/resistance levels
+                    data = self.feature_engine.add_support_resistance_levels(data)
+                
+            except Exception as e:
+                print(f"Warning: Advanced feature engineering failed: {e}")
+                print("Falling back to standard features...")
         
         return data
     

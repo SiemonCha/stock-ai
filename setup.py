@@ -18,7 +18,7 @@ def create_directories():
     
     for directory in directories:
         os.makedirs(directory, exist_ok=True)
-        print(f"✅ Created directory: {directory}")
+        print(f"Created directory: {directory}")
 
 def check_dependencies():
     """Check if required packages are installed"""
@@ -35,10 +35,10 @@ def check_dependencies():
     for package in required_packages:
         try:
             __import__(package)
-            print(f"✅ {package} is installed")
+            print(f"[OK] {package} is installed")
         except ImportError:
             missing_packages.append(package)
-            print(f"❌ {package} is missing")
+            print(f"[MISSING] {package} is missing")
     
     return missing_packages
 
@@ -47,39 +47,39 @@ def install_dependencies():
     try:
         print("Installing dependencies from requirements.txt...")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
-        print("✅ Dependencies installed successfully")
+        print("Dependencies installed successfully")
         return True
     except subprocess.CalledProcessError as e:
-        print(f"❌ Failed to install dependencies: {e}")
+        print(f"Failed to install dependencies: {e}")
         return False
 
 def main():
     """Main setup function"""
-    print("🚀 Setting up Stock AI system...")
+    print("Setting up Stock AI system...")
     
     # Create directories
-    print("\n📁 Creating directories...")
+    print("\nCreating directories...")
     create_directories()
     
     # Check dependencies
-    print("\n🔍 Checking dependencies...")
+    print("\nChecking dependencies...")
     missing = check_dependencies()
     
     if missing:
-        print(f"\n📦 Missing packages: {', '.join(missing)}")
+        print(f"\nMissing packages: {', '.join(missing)}")
         response = input("Would you like to install missing dependencies? (y/n): ")
         if response.lower() == 'y':
             if install_dependencies():
-                print("✅ Setup completed successfully!")
+                print("Setup completed successfully!")
             else:
-                print("❌ Setup failed. Please install dependencies manually.")
+                print("Setup failed. Please install dependencies manually.")
                 return 1
         else:
-            print("⚠️ Setup completed but some dependencies are missing.")
+            print("Setup completed but some dependencies are missing.")
     else:
-        print("✅ All dependencies are satisfied!")
+        print("All dependencies are satisfied!")
     
-    print("\n🎉 Stock AI setup completed!")
+    print("\nStock AI setup completed!")
     print("\nNext steps:")
     print("1. Train a model: python train.py --symbol AAPL --model lstm")
     print("2. Analyze results: python analyze.py --symbol AAPL --model lstm")
