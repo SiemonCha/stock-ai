@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  stock-ai-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - API_KEY=${API_KEY:-your-secret-api-key-here}
+      - REDIS_URL=redis://redis:6379
+      - API_WORKERS=4
+      - RATE_LIMIT_CALLS=1000
+      - CACHE_TTL=300
+    volumes:
+      - ../models:/app/models
+      - ../plots:/app/plots
+      - ../logs:/app/logs
+    depends_on:
+      - redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - stock-ai-api
+    restart: unless-stopped
+
+volumes:
+  redis_data:
