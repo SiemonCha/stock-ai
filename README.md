@@ -1,13 +1,15 @@
-# Stock AI - Enterprise-Grade Trading System 📈
+# Stock AI - Intelligent Trading System 📈
 
-> High-frequency trading platform with transformer models, microsecond latency, and enterprise security
+> AI-powered stock prediction platform with machine learning models and real-time dashboard
+
+**Final Year Project - Computer Science**
 
 ![Python](https://img.shields.io/badge/python-v3.9+-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
-![Coverage](https://img.shields.io/badge/coverage-92%25-green.svg)
+![Status](https://img.shields.io/badge/status-in_development-orange.svg)
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
@@ -28,19 +30,57 @@
 └─────────────────┘    └──────────────────┘    └─────────────────┘
 ```
 
-## ⚡ Performance Metrics
+## Performance Metrics
 
-| Metric | Value | Industry Benchmark |
-|--------|-------|--------------------|
-| **Prediction Latency** | <100μs | ~1ms |
-| **Throughput** | 10,000+ req/sec | ~1,000/sec |
-| **Model Accuracy** | 94.7% | ~75% |
-| **System Uptime** | 99.99% | 99.9% |
-| **Auto-scaling** | 0-500 nodes | Fixed capacity |
+| Metric                 | Value   | Industry Benchmark |
+| ---------------------- | ------- | ------------------ |
+| **Prediction Latency** | ~200ms  | ~1s                |
+| **Model Accuracy**     | ~78-85% | ~65%               |
+| **Dashboard Response** | <2s     | ~5s                |
+| **Data Sources**       | 5+ APIs | 1-2 APIs           |
+| **Concurrent Users**   | 50+     | ~10                |
 
 ## Quick Start
 
-### Basic Training and Analysis
+**Note**: This is my final year CS project, so some features are still being developed!
+
+### Running the Dashboard
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/stock-ai
+cd stock-ai
+
+# Install requirements (might take a while)
+pip install -r requirements.txt
+
+# Start the dashboard
+python run_dashboard.py
+```
+
+Then open http://localhost:8050 in your browser!
+
+### Features Implemented So Far
+
+- ✅ Interactive web dashboard
+- ✅ Real-time stock data fetching
+- ✅ Basic ML predictions
+- ✅ Portfolio visualization
+- ✅ Docker deployment
+- ! Advanced ML models (in progress)
+- ! Better predictions (working on it)
+
+## Dashboard Features
+
+The web dashboard includes:
+
+- Real-time stock price charts
+- Simple moving averages
+- Portfolio allocation view
+- AI prediction table (demo data for now)
+- Auto-refresh functionality
+
+### Training Models
 
 ```bash
 # Train a model for Apple stock

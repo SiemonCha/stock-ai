@@ -1,59 +1,43 @@
 #!/usr/bin/env python3
 """
-Stock AI Dashboard Launcher
+Dashboard Launcher for Stock AI Project
 
-Quick launcher script for the interactive web dashboard.
-Run this to start the dashboard server.
+Simple script to run my stock dashboard.
+This is for my CS final year project!
 """
 
 import sys
 import os
-import logging
 from pathlib import Path
 
-# Add src directory to path
+# Add src to path so we can import our modules
 sys.path.append(str(Path(__file__).parent / "src"))
 
-try:
-    from src.frontend.dashboard import StockAIDashboard
+def main():
+    print("=" * 50)
+    print("🚀 Stock AI Dashboard - Final Year Project")
+    print("=" * 50)
+    print("📊 Starting dashboard server...")
+    print("🌐 Will open at: http://localhost:8050")
+    print("💡 Press Ctrl+C to stop")
+    print()
     
-    def main():
-        """Main launcher function"""
+    try:
+        # Try the simple dashboard first (more reliable)
+        from src.frontend.simple_dashboard import StockDashboard
+        dashboard = StockDashboard()
+        dashboard.run(debug=True, port=8050)
         
-        # Setup logging
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
-        
-        print("🚀 Starting Stock AI Interactive Dashboard...")
-        print("📊 Features: Real-time charts, AI predictions, portfolio monitoring")
-        print("🌐 Dashboard URL: http://localhost:8050")
-        print("📱 Mobile responsive design")
-        print("⚡ Auto-refresh every 30 seconds")
-        print("-" * 60)
-        
-        # Initialize and run dashboard
-        dashboard = StockAIDashboard()
-        
-        try:
-            dashboard.run_server(
-                debug=False,  # Set to False for production-like behavior
-                port=8050,
-                dev_tools_hot_reload=True,
-                dev_tools_ui=True
-            )
-        except KeyboardInterrupt:
-            print("\n👋 Dashboard stopped by user")
-        except Exception as e:
-            print(f"❌ Error starting dashboard: {e}")
-            sys.exit(1)
-    
-    if __name__ == "__main__":
-        main()
+    except ImportError:
+        print("❌ Could not import dashboard modules")
+        print("💡 Make sure you've installed the requirements:")
+        print("   pip install dash plotly pandas yfinance")
+        sys.exit(1)
+    except KeyboardInterrupt:
+        print("\n👋 Dashboard stopped. Thanks for checking out my project!")
+    except Exception as e:
+        print(f"❌ Something went wrong: {e}")
+        print("💡 This is still a work in progress!")
 
-except ImportError as e:
-    print("❌ Missing dependencies. Please install frontend requirements:")
-    print("pip install -r requirements_frontend.txt")
-    print(f"Error: {e}")
-    sys.exit(1)
+if __name__ == "__main__":
+    main()
