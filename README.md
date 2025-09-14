@@ -2,7 +2,7 @@
 
 > AI-powered stock prediction platform with machine learning models and real-time dashboard
 
-**Final Year Project - Computer Science**
+**My Challenge Project - Computer Science**
 
 ![Python](https://img.shields.io/badge/python-v3.9+-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
