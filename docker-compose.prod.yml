@@ -1,0 +1,163 @@
+# Production Docker Compose with load balancing and monitoring
+version: '3.8'
+
+services:
+  # Load Balancer
+  nginx:
+    image: nginx:alpine
+    container_name: stockai-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/ssl/certs:ro
+    depends_on:
+      - stockai-dashboard-1
+      - stockai-dashboard-2
+    networks:
+      - stockai-network
+
+  # Dashboard Instances (Load Balanced)
+  stockai-dashboard-1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: stockai-dashboard-1
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=production
+      - REDIS_URL=redis://redis:6379
+      - INSTANCE_ID=dashboard-1
+    volumes:
+      - ./models:/app/models:ro
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - stockai-network
+
+  stockai-dashboard-2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: stockai-dashboard-2
+    restart: unless-stopped
+    environment:
+      - ENVIRONMENT=production
+      - REDIS_URL=redis://redis:6379
+      - INSTANCE_ID=dashboard-2
+    volumes:
+      - ./models:/app/models:ro
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - stockai-network
+
+  # Redis Cluster for High Availability
+  redis:
+    image: redis:7-alpine
+    container_name: stockai-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - stockai-network
+    command: >
+      redis-server 
+      --appendonly yes 
+      --maxmemory 2gb 
+      --maxmemory-policy allkeys-lru
+
+  # PostgreSQL with backup
+  postgres:
+    image: postgres:15-alpine
+    container_name: stockai-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=stockai
+      - POSTGRES_USER=stockai
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_MULTIPLE_DATABASES=stockai_analytics,stockai_audit
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backups:/backups
+      - ./scripts/init-prod-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - stockai-network
+    secrets:
+      - postgres_password
+
+  # Monitoring Stack
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: stockai-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - stockai-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: stockai-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD_FILE=/run/secrets/grafana_password
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana:/etc/grafana/provisioning
+    networks:
+      - stockai-network
+    secrets:
+      - grafana_password
+
+  # Log Management
+  loki:
+    image: grafana/loki:latest
+    container_name: stockai-loki
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    volumes:
+      - loki_data:/loki
+      - ./monitoring/loki.yml:/etc/loki/local-config.yaml:ro
+    networks:
+      - stockai-network
+
+volumes:
+  redis_data:
+    driver: local
+  postgres_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  loki_data:
+    driver: local
+
+networks:
+  stockai-network:
+    driver: bridge
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password.txt
+  grafana_password:
+    file: ./secrets/grafana_password.txt

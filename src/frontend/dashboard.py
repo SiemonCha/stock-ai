@@ -1,52 +1,61 @@
 """
-Interactive Web Dashboard for Stock AI Trading System
+Stock AI Dashboard - Interactive Web Interface
 
-Real-time trading dashboard with live charts, portfolio monitoring, and system metrics.
-Built with Dash and Plotly for professional visualization.
+A web dashboard for visualizing stock predictions and portfolio performance.
+This is my first attempt at building a financial dashboard with real-time data.
+
+Built with Dash and Plotly - still learning some of the advanced features!
 """
 
 import dash
-from dash import dcc, html, Input, Output, State, dash_table, callback
+from dash import dcc, html, Input, Output, State, dash_table
 import plotly.graph_objs as go
 import plotly.express as px
 import pandas as pd
 import numpy as np
-import redis
 import json
 from datetime import datetime, timedelta
 import logging
-from typing import Dict, List, Any, Optional
-import asyncio
-from concurrent.futures import ThreadPoolExecutor
 import yfinance as yf
+
+# Try to import Redis, but handle if not installed
+try:
+    import redis
+    REDIS_AVAILABLE = True
+except ImportError:
+    REDIS_AVAILABLE = False
+    print("Redis not installed - using demo data only")
 
 
 class StockAIDashboard:
-    """Main dashboard application class"""
+    """Main dashboard class - handles the web interface"""
     
     def __init__(self, redis_url="redis://localhost:6379"):
+        # Initialize Dash app with basic styling
         self.app = dash.Dash(__name__, external_stylesheets=[
             'https://codepen.io/chriddyp/pen/bWLwgP.css',
             'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'
         ])
         
-        try:
-            self.redis_client = redis.from_url(redis_url)
-            self.redis_available = True
-        except:
-            self.redis_available = False
-            logging.warning("Redis not available, using demo data")
+        # Try to connect to Redis for real-time data
+        self.redis_client = None
+        if REDIS_AVAILABLE:
+            try:
+                self.redis_client = redis.from_url(redis_url)
+                self.redis_client.ping()  # Test connection
+                print("Connected to Redis successfully!")
+            except:
+                print("Could not connect to Redis - using demo data")
+                self.redis_client = None
         
-        self.executor = ThreadPoolExecutor(max_workers=4)
-        self.logger = logging.getLogger(__name__)
-        
-        # Demo data for when Redis isn't available
+        # Stock symbols for demo
         self.demo_symbols = ['AAPL', 'GOOGL', 'MSFT', 'TSLA', 'AMZN']
         
-        self._setup_layout()
-        self._setup_callbacks()
+        # Set up the dashboard
+        self.setup_layout()
+        self.setup_callbacks()
     
-    def _setup_layout(self):
+    def setup_layout(self):
         """Setup the dashboard layout"""
         
         self.app.layout = html.Div([
@@ -202,7 +211,7 @@ class StockAIDashboard:
             dcc.Store(id='predictions-store')
         ])
     
-    def _setup_callbacks(self):
+    def setup_callbacks(self):
         """Setup all dashboard callbacks"""
         
         @self.app.callback(
@@ -247,11 +256,11 @@ class StockAIDashboard:
                    market_data.to_dict('records') if market_data is not None else {},
                    predictions_data)
     
-    def _get_market_data(self, symbol: str, timerange: str) -> Optional[pd.DataFrame]:
-        """Get market data for symbol"""
+    def get_market_data(self, symbol, timerange):
+        """Get stock market data - tries Redis first, then Yahoo Finance"""
         try:
-            # Try to get data from Redis first
-            if self.redis_available:
+            # Check if we have Redis connection for cached data
+            if self.redis_client:
                 redis_key = f"market_data:{symbol}:{timerange}"
                 cached_data = self.redis_client.get(redis_key)
                 if cached_data:

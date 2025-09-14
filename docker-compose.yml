@@ -1,22 +1,49 @@
 version: '3.8'
 
 services:
-  # Stock AI API Service
-  stockai-api:
+  # Stock AI Dashboard Service
+  stockai-dashboard:
     build:
       context: .
       dockerfile: Dockerfile
       target: production
-    container_name: stockai-api
+    container_name: stockai-dashboard
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "8050:8050"  # Dashboard port
+      - "8000:8000"  # API port
     environment:
       - ENVIRONMENT=production
-      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-stock-ai-secret-change-in-production}
-      - STOCK_AI_API_KEY=${STOCK_AI_API_KEY:-demo-api-key}
       - REDIS_URL=redis://redis:6379
-      - DATABASE_URL=postgresql://stockai:password@postgres:5432/stockai
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+    volumes:
+      - ./models:/app/models
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - stockai-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8050"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Model Training Service
+  stockai-training:
+    build:
+      context: .
+      dockerfile: Dockerfile.training
+    container_name: stockai-training
+    restart: "no"  # Run on-demand
+    environment:
+      - ENVIRONMENT=production
+      - REDIS_URL=redis://redis:6379
+      - GPU_ENABLED=false
     volumes:
       - ./models:/app/models
       - ./data:/app/data
@@ -26,11 +53,8 @@ services:
       - postgres
     networks:
       - stockai-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    profiles:
+      - training
 
   # Redis for caching
   redis:
