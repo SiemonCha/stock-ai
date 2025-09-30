@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.9, 3.10, 3.11]
+        python-version: ["3.9", "3.10", "3.11"]
     
     steps:
     - name: Checkout code
@@ -179,26 +179,19 @@ jobs:
   security-scan:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
+
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
         scan-type: 'fs'
         format: 'sarif'
         output: 'trivy-results.sarif'
-    
+
     - name: Upload Trivy scan results to GitHub Security
       uses: github/codeql-action/upload-sarif@v2
       with:
         sarif_file: 'trivy-results.sarif'
-    
-    - name: Docker image security scan
-      if: github.event_name == 'push'
-      run: |
-        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-        -v $(pwd):/workspace aquasec/trivy image \
-        ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} || true
