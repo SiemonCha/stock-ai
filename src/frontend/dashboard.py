@@ -15,6 +15,7 @@ import pandas as pd
 import numpy as np
 import json
 from datetime import datetime, timedelta
+from typing import Dict, Any
 import logging
 import yfinance as yf
 

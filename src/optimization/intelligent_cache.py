@@ -9,6 +9,7 @@ import json
 import hashlib
 import time
 import threading
+import functools
 from typing import Dict, List, Any, Optional, Tuple, Callable
 from datetime import datetime, timedelta
 from pathlib import Path

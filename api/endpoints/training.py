@@ -229,7 +229,7 @@ async def cancel_training_job(job_id: str):
     return {"message": f"Job {job_id} cancelled"}
 
 @router.post("/quick/{symbol}")
-async def quick_train(symbol: str, model_type: str = "lstm", background_tasks: BackgroundTasks):
+async def quick_train(background_tasks: BackgroundTasks, symbol: str, model_type: str = "lstm"):
     """
     Quick training endpoint
     

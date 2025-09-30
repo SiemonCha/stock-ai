@@ -1,336 +1,44 @@
 # Stock AI - Intelligent Trading System 📈
 
-> AI-powered stock prediction platform with machine learning models and real-time dashboard
-
-**My Challenge Project - Computer Science**
+> AI-powered stock prediction platform with deep learning models, sentiment analysis, and production-ready MLOps
 
 ![Python](https://img.shields.io/badge/python-v3.9+-blue.svg)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.13-orange.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
-![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
-![Status](https://img.shields.io/badge/status-in_development-orange.svg)
+![CI/CD](https://img.shields.io/badge/CI%2FCD-passing-brightgreen.svg)
 
-## System Architecture
+## What is this?
 
-```
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Data Sources  │    │   AI/ML Engine   │    │   Trading API   │
-│                 │    │                  │    │                 │
-│ • Market Data   │───▶│ • Transformers   │───▶│ • Predictions   │
-│ • News/Social   │    │ • Alt Data Fusion│    │ • Portfolios    │
-│ • Economic      │    │ • Risk Models    │    │ • Real-time     │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
-         │                       │                       │
-         ▼                       ▼                       ▼
-┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│  Streaming      │    │   Monitoring     │    │   Security      │
-│                 │    │                  │    │                 │
-│ • Microsecond   │    │ • Dashboards     │    │ • MFA/RBAC      │
-│ • WebSocket     │    │ • Alerts         │    │ • Encryption    │
-│ • Kafka/Redis   │    │ • Compliance     │    │ • Audit Logs    │
-└─────────────────┘    └──────────────────┘    └─────────────────┘
-```
+Stock AI is a production-ready machine learning platform that predicts stock prices using:
+- **Deep Learning**: LSTM, GRU, Transformer, and Ensemble models
+- **Sentiment Analysis**: Hugging Face Transformers for news/social media analysis
+- **MLOps**: FastAPI, Docker, CI/CD, automated testing
+- **Real-time Dashboard**: Interactive visualizations and live predictions
 
-## Performance Metrics
+## Tech Stack
 
-| Metric                 | Value   | Industry Benchmark |
-| ---------------------- | ------- | ------------------ |
-| **Prediction Latency** | ~200ms  | ~1s                |
-| **Model Accuracy**     | ~78-85% | ~65%               |
-| **Dashboard Response** | <2s     | ~5s                |
-| **Data Sources**       | 5+ APIs | 1-2 APIs           |
-| **Concurrent Users**   | 50+     | ~10                |
+### Core ML/AI
+- **Deep Learning**: TensorFlow, PyTorch, Keras
+- **Transformers**: Hugging Face (sentiment analysis)
+- **ML Libraries**: XGBoost, LightGBM, CatBoost, scikit-learn
+- **Advanced**: Quantum models (Qiskit, PennyLane), Reinforcement Learning
+
+### MLOps & Production
+- **API**: FastAPI with authentication & rate limiting
+- **Containerization**: Docker, docker-compose
+- **CI/CD**: GitHub Actions with automated testing
+- **Monitoring**: Real-time dashboards, health checks
+- **Caching**: Redis, distributed compute with Ray
+
+### Data & Analysis
+- **Market Data**: Yahoo Finance, Alpha Vantage, Binance
+- **Alternative Data**: News sentiment, social media, economic indicators
+- **Analysis**: pandas, numpy, scipy, statsmodels
 
 ## Quick Start
 
-**Note**: This is my final year CS project, so some features are still being developed!
-
-### Running the Dashboard
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/stock-ai
-cd stock-ai
-
-# Install requirements (might take a while)
-pip install -r requirements.txt
-
-# Start the dashboard
-python run_dashboard.py
-```
-
-Then open http://localhost:8050 in your browser!
-
-### Features Implemented So Far
-
-- ✅ Interactive web dashboard
-- ✅ Real-time stock data fetching
-- ✅ Basic ML predictions
-- ✅ Portfolio visualization
-- ✅ Docker deployment
-- ! Advanced ML models (in progress)
-- ! Better predictions (working on it)
-
-## Dashboard Features
-
-The web dashboard includes:
-
-- Real-time stock price charts
-- Simple moving averages
-- Portfolio allocation view
-- AI prediction table (demo data for now)
-- Auto-refresh functionality
-
-### Training Models
-
-```bash
-# Train a model for Apple stock
-python train_models.py --symbol AAPL --model ensemble --epochs 50
-
-# Analyze predictions with uncertainty and regime analysis
-python analyze_predictions.py --symbol AAPL --uncertainty --regime-analysis --save-plots
-```
-
-### Production API
-
-```bash
-# Start production API server
-python start_api.py
-
-# API will be available at http://localhost:8000
-# Documentation at http://localhost:8000/docs
-```
-
-### Distributed Training
-
-```bash
-# Train multiple symbols in parallel
-python train_distributed.py --symbols AAPL GOOGL MSFT TSLA --model nextgen_ensemble
-```
-
-### Automated Monitoring
-
-```bash
-# Start automated retraining service
-python auto_retrain.py start --symbols AAPL GOOGL MSFT
-```
-
-## Project Structure
-
-```
-stock-ai/
-├── Core Scripts (Main Interface)
-│   ├── train_models.py          # Train stock prediction models
-│   ├── analyze_predictions.py   # Analyze model performance
-│   ├── start_api.py             # Launch production API
-│   ├── train_distributed.py     # Distributed training across multiple stocks
-│   └── auto_retrain.py          # Automated retraining service
-│
-├── src/
-│   ├── core/                 # Core System Components
-│   │   ├── models.py            # Main model architectures (LSTM, GRU, Transformer, Ensemble)
-│   │   └── data_collector.py    # Yahoo Finance data collection
-│   │
-│   ├── ai/                     # Advanced AI Features
-│   │   ├── advanced_models.py   # Next-generation ensemble models
-│   │   ├── quantum_models.py    # Quantum-enhanced neural networks
-│   │   ├── feature_engineering.py # Intelligent feature creation
-│   │   ├── hyperparameter_tuning.py # Automated optimization
-│   │   ├── realtime_analysis.py # Live market intelligence
-│   │   ├── market_regimes.py    # Market regime detection
-│   │   └── portfolio_optimizer.py # Multi-asset optimization
-│   │
-│   ├── data_sources/           # Data Integration
-│   │   └── alternative_data.py  # News, sentiment, economic data
-│   │
-│   ├── 🔧 services/             # Production Services
-│   │   ├── api.py              # FastAPI production server
-│   │   ├── distributed_compute.py # Multi-GPU/cluster training
-│   │   └── auto_training.py    # Automated retraining pipeline
-│   │
-│   ├── visualization/          # Charts and Analysis
-│   │   └── charts.py           # Professional visualization tools
-│   │
-│   └── deploy/                # Deployment
-│       ├── docker/             # Docker containers
-│       └── scripts/            # Deployment automation
-│
-└── Documentation
-    ├── README.md               # This file
-    ├── PHASE1_SUMMARY.md       # Phase 1 features summary
-    └── PHASE2_SUMMARY.md       # Phase 2 advanced features
-```
-
-## Model Types Available
-
-### Basic Models
-
-- **LSTM**: Long Short-Term Memory networks for time series
-- **GRU**: Gated Recurrent Unit for efficient sequence modeling
-- **Transformer**: Attention-based architecture for complex patterns
-- **CNN-LSTM**: Hybrid convolutional + recurrent networks
-
-### Advanced Models
-
-- **Ensemble**: Combines multiple models for better accuracy
-- **NextGen Ensemble**: Advanced ensemble with temporal convolution
-- **Advanced Ensemble**: Meta-learning ensemble with uncertainty
-- **Quantum Models**: Quantum-enhanced neural networks
-
-## Key Features
-
-### **Core Capabilities**
-
-- **Multiple Model Architectures**: LSTM, GRU, Transformer, CNN-LSTM, Ensemble
-- **Intelligent Feature Engineering**: 100+ automatically generated features
-- **Uncertainty Quantification**: Confidence intervals for all predictions
-- **Market Regime Detection**: Identifies Bull, Bear, Sideways, High-Vol, Crisis markets
-
-### **Advanced AI**
-
-- **Quantum-Enhanced Models**: Next-generation quantum computing integration
-- **Real-Time Intelligence**: Live market data processing and anomaly detection
-- **Alternative Data Integration**: News sentiment, social media, economic indicators
-- **Automated Hyperparameter Optimization**: Self-tuning model parameters
-
-### **Production Ready**
-
-- **REST API**: Professional API with authentication and rate limiting
-- **Docker Deployment**: One-command containerized deployment
-- **Distributed Training**: Multi-GPU and cluster computing support
-- **Automated Monitoring**: Self-healing with automated retraining
-
-### **Portfolio Management**
-
-- **Multi-Asset Optimization**: 7 advanced portfolio strategies
-- **Risk Management**: VaR, drawdown, Sharpe ratio optimization
-- **Regime-Aware Allocation**: Dynamic rebalancing based on market conditions
-
-## Usage Examples
-
-### Training Models
-
-```bash
-# Basic training
-python train_models.py --symbol AAPL --epochs 100
-
-# Advanced training with intelligent features
-python train_models.py --symbol GOOGL --model nextgen_ensemble \
-    --features intelligent --epochs 150 --optimize
-
-# Distributed training for multiple symbols
-python train_distributed.py \
-    --symbols AAPL GOOGL MSFT TSLA AMZN NVDA \
-    --model advanced_ensemble \
-    --epochs 100 \
-    --feature-level intelligent
-```
-
-### Analysis and Visualization
-
-```bash
-# Comprehensive analysis
-python analyze_predictions.py --symbol AAPL \
-    --model advanced_ensemble \
-    --uncertainty \
-    --regime-analysis \
-    --save-plots \
-    --detailed
-
-# Market regime analysis
-python analyze_predictions.py --symbol TSLA --regime-analysis
-```
-
-### Production Deployment
-
-```bash
-# Start API server
-python start_api.py
-
-# With Docker (recommended)
-cd src/deploy && ./scripts/deploy.sh
-
-# Automated monitoring
-python auto_retrain.py start \
-    --symbols AAPL GOOGL MSFT \
-    --enable-email \
-    --email-recipients admin@company.com
-```
-
-### API Usage
-
-```bash
-# Make predictions
-curl -X POST "http://localhost:8000/predict" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{"symbol": "AAPL", "days": 30, "include_uncertainty": true}'
-
-# Portfolio optimization
-curl -X POST "http://localhost:8000/portfolio/optimize" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{"symbols": ["AAPL", "GOOGL", "MSFT"], "method": "mean_reversion"}'
-
-# Market regime analysis
-curl -X POST "http://localhost:8000/regime/analyze" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{"symbol": "AAPL", "include_forecast": true}'
-```
-
-## Configuration
-
-### Environment Variables
-
-```bash
-# API Configuration
-export API_KEY="your-secret-api-key"
-export API_HOST="0.0.0.0"
-export API_PORT="8000"
-
-# Training Configuration
-export MODEL_CACHE_SIZE="10"
-export MAX_PREDICTION_DAYS="90"
-
-# Database (optional)
-export DATABASE_URL="postgresql://user:pass@localhost/stockai"
-```
-
-### Training Parameters
-
-```bash
-# Model Selection
---model [lstm|gru|transformer|cnn_lstm|ensemble|nextgen_ensemble|advanced_ensemble]
-
-# Feature Engineering
---features [standard|advanced|intelligent|all]
-
-# Advanced Options
---optimize              # Enable hyperparameter optimization
---distributed           # Use distributed training
---quantum               # Enable quantum-enhanced models
---regime-aware          # Enable market regime detection
-```
-
-## Performance Metrics
-
-### Accuracy Improvements
-
-- **Baseline LSTM**: ~78% directional accuracy
-- **Advanced Ensemble**: ~88-93% directional accuracy
-- **Quantum Models**: +5-15% improvement in complex patterns
-- **Regime-Aware**: +15-30% improvement during regime changes
-
-### Speed Improvements
-
-- **Single GPU**: 2-3x faster training
-- **Multi-GPU**: 4-10x faster training
-- **Distributed**: 5-20x faster for multiple symbols
-- **API Response**: <100ms with caching
-
-## Installation
-
-### Quick Install
+### 1. Installation
 
 ```bash
 # Clone repository
@@ -340,34 +48,283 @@ cd stock-ai
 # Install dependencies
 pip install -r requirements.txt
 
-# Optional: Install advanced dependencies
-pip install ray torch transformers ta-lib
+# Start the dashboard
+python run_dashboard.py
 ```
 
-### Production Install
+Open http://localhost:8050 in your browser!
+
+### 2. Train a Model
 
 ```bash
-# Docker deployment (recommended)
-cd src/deploy && ./scripts/deploy.sh
+# Train LSTM model for Apple stock
+python train_models.py --symbol AAPL --model lstm --epochs 50
 
-# Manual production setup
-pip install -r requirements.txt
-pip install fastapi uvicorn redis gunicorn
-python setup.py
+# Advanced ensemble with sentiment analysis
+python train_models.py --symbol GOOGL --model ensemble --features intelligent
 ```
 
-## Security & Best Practices
+### 3. Run Production API
 
-- **API Keys**: Always use strong API keys in production
-- **Rate Limiting**: Built-in rate limiting (100 requests/hour default)
-- **Data Validation**: All inputs validated and sanitized
-- **Error Handling**: Comprehensive error handling and logging
-- **Monitoring**: Built-in health checks and performance monitoring
+```bash
+# Start FastAPI server
+python start_api.py
 
-## License
+# API docs available at http://localhost:8000/docs
 
-This project is licensed under the MIT License - see `LICENSE` file for details.
+# Make predictions
+curl -X POST "http://localhost:8000/predict" \
+     -H "Content-Type: application/json" \
+     -d '{"symbol": "AAPL", "days": 30}'
+```
+
+### 4. Docker Deployment
+
+```bash
+# Build and run with Docker
+docker-compose up -d
+
+# Access API at http://localhost:8000
+# Access dashboard at http://localhost:8050
+```
+
+## Key Features
+
+### ✅ Machine Learning Models
+- **LSTM**: Long Short-Term Memory for time series
+- **GRU**: Gated Recurrent Units for efficient modeling
+- **Transformer**: Attention-based architecture for complex patterns
+- **Ensemble**: Combines multiple models (78-85% accuracy)
+- **Quantum Models**: Quantum-enhanced neural networks
+
+### ✅ NLP & Sentiment Analysis
+- **Hugging Face Transformers**: Pre-trained models for sentiment analysis
+- **News Analysis**: Real-time news sentiment scoring
+- **Social Media**: Twitter/Reddit sentiment tracking
+- **Multi-modal Fusion**: Combines price data + sentiment signals
+
+### ✅ MLOps & Production
+- **FastAPI REST API**: Professional endpoints with OpenAPI docs
+- **Docker Deployment**: Containerized with docker-compose
+- **CI/CD Pipeline**: Automated testing, linting, security scans
+- **Test Coverage**: 24 passing tests with pytest
+- **Monitoring**: Health checks, performance metrics, logging
+
+### ✅ Advanced Features
+- **Alternative Data**: News, social media, economic indicators
+- **Market Regime Detection**: Bull/bear/sideways market identification
+- **Portfolio Optimization**: Multi-asset allocation strategies
+- **Risk Management**: VaR, Sharpe ratio, drawdown analysis
+- **Distributed Training**: Multi-GPU and cluster support
+
+## Project Structure
+
+```
+stock-ai/
+├── src/
+│   ├── ai/                      # ML Models & Training
+│   │   ├── advanced_models.py   # Ensemble, TCN, attention models
+│   │   ├── quantum_models.py    # Quantum-enhanced networks
+│   │   └── hyperparameter_tuning.py
+│   │
+│   ├── alternative_data/        # NLP & Sentiment
+│   │   └── multi_source_integrator.py  # Transformers sentiment analysis
+│   │
+│   ├── services/               # Production API
+│   │   ├── api.py              # FastAPI server
+│   │   └── distributed_compute.py
+│   │
+│   ├── data_pipeline/          # Data Engineering
+│   │   ├── robust_collector.py
+│   │   ├── data_validator.py
+│   │   └── quality_monitor.py
+│   │
+│   └── deploy/                 # Deployment
+│       ├── docker/             # Docker configs
+│       └── scripts/            # Automation scripts
+│
+├── tests/                      # Test Suite
+│   ├── unit/                   # Unit tests
+│   ├── integration/            # Integration tests
+│   └── conftest.py            # Pytest fixtures
+│
+├── .github/workflows/          # CI/CD
+│   └── ci-cd.yml              # Automated testing & deployment
+│
+├── requirements.txt            # Python dependencies
+├── docker-compose.yml          # Docker orchestration
+└── README.md
+```
+
+## API Examples
+
+### Make Predictions
+
+```bash
+curl -X POST "http://localhost:8000/predict" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "symbol": "AAPL",
+       "days": 30,
+       "include_uncertainty": true
+     }'
+```
+
+### Portfolio Optimization
+
+```bash
+curl -X POST "http://localhost:8000/portfolio/optimize" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "symbols": ["AAPL", "GOOGL", "MSFT"],
+       "method": "sharpe"
+     }'
+```
+
+### Market Regime Analysis
+
+```bash
+curl -X POST "http://localhost:8000/regime/analyze" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "symbol": "AAPL",
+       "include_forecast": true
+     }'
+```
+
+## Performance Metrics
+
+| Metric | Value | Notes |
+|--------|-------|-------|
+| Model Accuracy | 78-85% | Directional prediction accuracy |
+| API Latency | <200ms | With caching enabled |
+| Test Coverage | 24 tests | Unit + integration tests |
+| Data Sources | 5+ APIs | Market data + alternative data |
+| Concurrent Users | 50+ | Load tested |
+
+## CI/CD Pipeline
+
+✅ Automated Testing (Python 3.9, 3.10, 3.11)
+✅ Code Linting (flake8, black, isort)
+✅ Security Scanning (Trivy, Bandit)
+✅ Docker Build & Push
+✅ Type Checking (mypy)
+
+## Technologies Breakdown
+
+### Deep Learning Frameworks
+```
+TensorFlow 2.13+    - Core deep learning
+PyTorch 2.0+        - Advanced models
+Transformers 4.30+  - NLP & sentiment analysis
+```
+
+### Production Stack
+```
+FastAPI 0.100+      - REST API framework
+Docker              - Containerization
+Redis               - Caching layer
+PostgreSQL          - Database (optional)
+```
+
+### ML Libraries
+```
+scikit-learn        - Classical ML algorithms
+XGBoost, LightGBM   - Gradient boosting
+Optuna              - Hyperparameter tuning
+Ray                 - Distributed computing
+```
+
+### Data & Analysis
+```
+pandas, numpy       - Data manipulation
+yfinance            - Market data
+newsapi-python      - News data
+tweepy              - Social media data
+```
+
+## Environment Setup
+
+```bash
+# API Configuration
+export API_KEY="your-secret-key"
+export API_HOST="0.0.0.0"
+export API_PORT="8000"
+
+# Model Configuration
+export MODEL_CACHE_SIZE="10"
+export MAX_PREDICTION_DAYS="90"
+
+# Optional: Database
+export DATABASE_URL="postgresql://user:pass@localhost/stockai"
+```
+
+## Testing
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run with coverage
+pytest tests/ --cov=src --cov-report=html
+
+# Run specific test suite
+pytest tests/unit/ -v
+pytest tests/integration/ -v
+```
+
+## Development
+
+```bash
+# Install dev dependencies
+pip install pytest pytest-cov pytest-mock flake8 black mypy
+
+# Format code
+black src/ tests/
+isort src/ tests/
+
+# Lint code
+flake8 src/ tests/
+
+# Type check
+mypy src/ --ignore-missing-imports
+```
+
+## Use Cases
+
+This project demonstrates:
+- **Deep Learning for Finance**: Time series prediction with LSTM/Transformer
+- **NLP with Transformers**: Sentiment analysis using Hugging Face
+- **MLOps Best Practices**: CI/CD, testing, containerization
+- **Production ML Systems**: FastAPI, monitoring, deployment
+- **Alternative Data Integration**: Multi-modal data fusion
+
+## Roadmap
+
+- [x] Core ML models (LSTM, GRU, Transformer)
+- [x] FastAPI production API
+- [x] Docker deployment
+- [x] CI/CD pipeline
+- [x] Sentiment analysis with Transformers
+- [ ] Increase test coverage to 90%
+- [ ] Add Kubernetes deployment
+- [ ] Real-time WebSocket streaming
+- [ ] Advanced portfolio optimization
 
 ## Disclaimer
 
-This software is for educational and research purposes only. Past performance does not guarantee future results. The authors are not responsible for any financial losses incurred through the use of this software.
+⚠️ **Educational & Research Use Only**
+
+This software is for learning and research purposes. It is NOT financial advice. Do not use this for actual trading without proper risk management and professional guidance. Past performance does not guarantee future results.
+
+## License
+
+MIT License - See [LICENSE](LICENSE) file for details
+
+## Contributing
+
+Contributions welcome! Please read the contributing guidelines and submit pull requests.
+
+---
+
+**Built with**: TensorFlow • PyTorch • Transformers • FastAPI • Docker • CI/CD

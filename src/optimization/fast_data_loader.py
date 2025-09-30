@@ -53,6 +53,12 @@ try:
 except ImportError:
     DATABASE_AVAILABLE = False
 
+try:
+    import numba
+    NUMBA_AVAILABLE = True
+except ImportError:
+    NUMBA_AVAILABLE = False
+
 class FastDataLoader:
     """
     Ultra-fast data loading with multiple optimization strategies
@@ -573,7 +579,10 @@ class FastPreprocessor:
     
     def _numba_sma(self, prices: np.ndarray, window: int) -> np.ndarray:
         """Numba-accelerated SMA calculation"""
-        
+
+        if not NUMBA_AVAILABLE:
+            return pd.Series(prices).rolling(window).mean().values
+
         @numba.jit(nopython=True)
         def _sma_kernel(prices, window):
             n = len(prices)
