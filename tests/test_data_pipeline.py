@@ -17,7 +17,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Import test framework
-from test_framework import AsyncTestCase, MockDataGenerator, TestFixtures
+from .test_framework import AsyncTestCase, MockDataGenerator, TestFixtures
 
 # Import components to test
 try:

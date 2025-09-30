@@ -19,7 +19,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Import test framework
-from test_framework import AsyncTestCase, MockDataGenerator, TestFixtures, BenchmarkRunner
+from .test_framework import AsyncTestCase, MockDataGenerator, TestFixtures, BenchmarkRunner
 
 try:
     import psutil

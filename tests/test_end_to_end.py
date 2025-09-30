@@ -18,7 +18,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Import test framework
-from test_framework import AsyncTestCase, MockDataGenerator, TestFixtures, BenchmarkRunner
+from .test_framework import AsyncTestCase, MockDataGenerator, TestFixtures, BenchmarkRunner
 
 class TestCompleteWorkflow(AsyncTestCase):
     """Test the complete investment workflow from start to finish"""
