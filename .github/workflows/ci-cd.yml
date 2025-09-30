@@ -46,7 +46,7 @@ jobs:
         pip install torch transformers xgboost lightgbm catboost || true
         pip install yfinance alpha_vantage requests websocket-client python-binance || true
         pip install ta scipy statsmodels || true
-        pip install fastapi uvicorn pydantic websockets python-multipart PyJWT || true
+        pip install fastapi uvicorn pydantic websockets python-multipart PyJWT aiohttp || true
         pip install pytest pytest-cov pytest-mock pytest-asyncio || true
         pip install redis matplotlib seaborn plotly || true
         pip install sqlalchemy psycopg2-binary pymongo || true

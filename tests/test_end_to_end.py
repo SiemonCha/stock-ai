@@ -446,15 +446,17 @@ class TestCompleteWorkflow(AsyncTestCase):
             }
             
             # Mock streaming data source
+            test_symbols = ["AAPL", "GOOGL", "MSFT"]
+
             class MockDataStream:
                 def __init__(self):
                     self.tick_count = 0
-                
+
                 async def get_tick(self):
                     """Get next market tick"""
                     self.tick_count += 1
-                    
-                    symbol = np.random.choice(self.test_symbols[:3])
+
+                    symbol = np.random.choice(test_symbols)
                     price = 100 + np.random.uniform(-5, 5)
                     volume = np.random.randint(1000, 10000)
                     

@@ -20,10 +20,10 @@ from .test_framework import AsyncTestCase, MockDataGenerator, TestFixtures, Benc
 
 # Import components to test
 try:
-    from models.ensemble_predictor import AdvancedEnsemblePredictor
-    from models.feature_engineer import FeatureEngineer
-    from models.risk_manager import RiskManager
-    from models.backtester import Backtester
+    from src.models.ensemble_predictor import AdvancedEnsemblePredictor
+    from src.models.feature_engineer import FeatureEngineer
+    from src.models.risk_manager import RiskManager
+    from src.models.backtester import Backtester
     MODELS_AVAILABLE = True
 except ImportError as e:
     MODELS_AVAILABLE = False

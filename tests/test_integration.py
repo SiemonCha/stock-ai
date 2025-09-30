@@ -515,11 +515,16 @@ class TestAPIIntegration(AsyncTestCase):
     
     def test_external_api_integration(self):
         """Test integration with external APIs"""
-        
+
+        try:
+            import aiohttp
+        except ImportError:
+            self.skipTest("aiohttp not available")
+
         async def mock_api_calls():
             """Mock various API calls"""
             api_results = {}
-            
+
             # Mock stock data API
             with patch('aiohttp.ClientSession.get') as mock_get:
                 mock_response = Mock()

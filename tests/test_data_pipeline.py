@@ -21,11 +21,11 @@ from .test_framework import AsyncTestCase, MockDataGenerator, TestFixtures
 
 # Import components to test
 try:
-    from data_pipeline.robust_collector import RobustDataCollector
-    from data_pipeline.data_validator import DataValidator
-    from data_pipeline.data_cleaner import AdvancedDataCleaner
-    from data_pipeline.quality_monitor import DataQualityMonitor, QualityMetric, MetricType
-    from data_pipeline.backup_system import BackupManager
+    from src.data_pipeline.robust_collector import RobustDataCollector
+    from src.data_pipeline.data_validator import DataValidator
+    from src.data_pipeline.data_cleaner import AdvancedDataCleaner
+    from src.data_pipeline.quality_monitor import DataQualityMonitor, QualityMetric, MetricType
+    from src.data_pipeline.backup_system import BackupManager
     DATA_PIPELINE_AVAILABLE = True
 except ImportError as e:
     DATA_PIPELINE_AVAILABLE = False
