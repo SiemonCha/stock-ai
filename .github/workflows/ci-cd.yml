@@ -80,12 +80,13 @@ jobs:
         pip install bandit
         bandit -r src/ api/ -ll || true
 
-  # Build and push Docker image
+  # Build and push Docker image (disabled - too slow for CI/CD)
+  # Re-enable by changing 'false' to appropriate condition
   build-and-push:
     needs: test
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event_name == 'release'
-    continue-on-error: true  # Don't fail CI if Docker build fails
+    if: false  # Disabled - Docker build takes too long with ML dependencies
+    continue-on-error: true
 
     permissions:
       contents: read
@@ -128,11 +129,11 @@ jobs:
         cache-to: type=gha,mode=max
         platforms: linux/amd64,linux/arm64
 
-  # Deploy to staging (on develop branch)
+  # Deploy to staging (disabled - requires infrastructure)
   deploy-staging:
     needs: build-and-push
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
+    if: false  # Disabled - requires deployment infrastructure
     environment: staging
     
     steps:
@@ -156,11 +157,11 @@ jobs:
         channel: '#deployments'
         webhook_url: ${{ secrets.SLACK_WEBHOOK }}
 
-  # Deploy to production (on release)
+  # Deploy to production (disabled - requires infrastructure)
   deploy-production:
     needs: build-and-push
     runs-on: ubuntu-latest
-    if: github.event_name == 'release'
+    if: false  # Disabled - requires deployment infrastructure
     environment: production
     
     steps:
