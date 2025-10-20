@@ -1,4 +1,4 @@
-# Stock AI - Intelligent Trading System 📈
+# Stock AI - Intelligent Trading System
 
 > AI-powered stock prediction platform with deep learning models, sentiment analysis, and production-ready MLOps
 
@@ -11,6 +11,7 @@
 ## What is this?
 
 Stock AI is a production-ready machine learning platform that predicts stock prices using:
+
 - **Deep Learning**: LSTM, GRU, Transformer, and Ensemble models
 - **Sentiment Analysis**: Hugging Face Transformers for news/social media analysis
 - **MLOps**: FastAPI, Docker, CI/CD, automated testing
@@ -19,12 +20,14 @@ Stock AI is a production-ready machine learning platform that predicts stock pri
 ## Tech Stack
 
 ### Core ML/AI
+
 - **Deep Learning**: TensorFlow, PyTorch, Keras
 - **Transformers**: Hugging Face (sentiment analysis)
 - **ML Libraries**: XGBoost, LightGBM, CatBoost, scikit-learn
 - **Advanced**: Quantum models (Qiskit, PennyLane), Reinforcement Learning
 
 ### MLOps & Production
+
 - **API**: FastAPI with authentication & rate limiting
 - **Containerization**: Docker, docker-compose
 - **CI/CD**: GitHub Actions with automated testing
@@ -35,6 +38,7 @@ Stock AI is a production-ready machine learning platform that predicts stock pri
 - **Caching**: Redis, distributed compute with Ray
 
 ### Data & Analysis
+
 - **Market Data**: Yahoo Finance, Alpha Vantage, Binance
 - **Alternative Data**: News sentiment, social media, economic indicators
 - **Analysis**: pandas, numpy, scipy, statsmodels
@@ -103,20 +107,23 @@ mlflow ui --backend-store-uri ./mlruns
 
 ## Key Features
 
-### ✅ Machine Learning Models
+### >> Machine Learning Models
+
 - **LSTM**: Long Short-Term Memory for time series
 - **GRU**: Gated Recurrent Units for efficient modeling
 - **Transformer**: Attention-based architecture for complex patterns
 - **Ensemble**: Combines multiple models (78-85% accuracy)
 - **Quantum Models**: Quantum-enhanced neural networks
 
-### ✅ NLP & Sentiment Analysis
+### >> NLP & Sentiment Analysis
+
 - **Hugging Face Transformers**: Pre-trained models for sentiment analysis
 - **News Analysis**: Real-time news sentiment scoring
 - **Social Media**: Twitter/Reddit sentiment tracking
 - **Multi-modal Fusion**: Combines price data + sentiment signals
 
-### ✅ MLOps & Production
+### >> MLOps & Production
+
 - **FastAPI REST API**: Professional endpoints with OpenAPI docs
 - **Docker Deployment**: Containerized with docker-compose
 - **CI/CD Pipeline**: Automated testing, linting, security scans
@@ -126,7 +133,8 @@ mlflow ui --backend-store-uri ./mlruns
 - **Test Coverage**: 24 passing tests with pytest
 - **Monitoring**: Health checks, performance metrics, logging
 
-### ✅ Advanced Features
+### >> Advanced Features
+
 - **Alternative Data**: News, social media, economic indicators
 - **Market Regime Detection**: Bull/bear/sideways market identification
 - **Portfolio Optimization**: Multi-asset allocation strategies
@@ -143,7 +151,7 @@ stock-ai/
 │   │   ├── quantum_models.py    # Quantum-enhanced networks
 │   │   └── hyperparameter_tuning.py
 │   │
-│   ├── mlops/                   # 🆕 MLOps Components
+│   ├── mlops/                   # MLOps Components
 │   │   ├── experiment_tracker.py    # Experiment tracking (MLflow wrapper)
 │   │   ├── feature_store.py         # Feature caching with Redis
 │   │   └── pipeline_orchestrator.py # Pipeline orchestration
@@ -172,7 +180,7 @@ stock-ai/
 ├── .github/workflows/          # CI/CD
 │   └── ci-cd.yml              # Automated testing & deployment
 │
-├── example_mlops_usage.py      # 🆕 MLOps demo script
+├── example_mlops_usage.py      # MLOps demo script
 ├── requirements.txt            # Python dependencies
 ├── docker-compose.yml          # Docker orchestration
 └── README.md
@@ -292,13 +300,13 @@ results = pipeline.run()
 
 ## Performance Metrics
 
-| Metric | Value | Notes |
-|--------|-------|-------|
-| Model Accuracy | 78-85% | Directional prediction accuracy |
-| API Latency | <200ms | With caching enabled |
-| Test Coverage | 24 tests | Unit + integration tests |
-| Data Sources | 5+ APIs | Market data + alternative data |
-| Concurrent Users | 50+ | Load tested |
+| Metric           | Value    | Notes                           |
+| ---------------- | -------- | ------------------------------- |
+| Model Accuracy   | 78-85%   | Directional prediction accuracy |
+| API Latency      | <200ms   | With caching enabled            |
+| Test Coverage    | 24 tests | Unit + integration tests        |
+| Data Sources     | 5+ APIs  | Market data + alternative data  |
+| Concurrent Users | 50+      | Load tested                     |
 
 ## CI/CD Pipeline
 
@@ -311,6 +319,7 @@ results = pipeline.run()
 ## Technologies Breakdown
 
 ### Deep Learning Frameworks
+
 ```
 TensorFlow 2.13+    - Core deep learning
 PyTorch 2.0+        - Advanced models
@@ -318,6 +327,7 @@ Transformers 4.30+  - NLP & sentiment analysis
 ```
 
 ### Production Stack
+
 ```
 FastAPI 0.100+      - REST API framework
 Docker              - Containerization
@@ -326,6 +336,7 @@ PostgreSQL          - Database (optional)
 ```
 
 ### ML Libraries
+
 ```
 scikit-learn        - Classical ML algorithms
 XGBoost, LightGBM   - Gradient boosting
@@ -334,6 +345,7 @@ Ray                 - Distributed computing
 ```
 
 ### Data & Analysis
+
 ```
 pandas, numpy       - Data manipulation
 yfinance            - Market data
@@ -391,6 +403,7 @@ mypy src/ --ignore-missing-imports
 ## Use Cases
 
 This project demonstrates:
+
 - **Deep Learning for Finance**: Time series prediction with LSTM/Transformer
 - **NLP with Transformers**: Sentiment analysis using Hugging Face
 - **MLOps Best Practices**: CI/CD, testing, containerization
@@ -404,9 +417,9 @@ This project demonstrates:
 - [x] Docker deployment
 - [x] CI/CD pipeline
 - [x] Sentiment analysis with Transformers
-- [x] 🆕 Experiment tracking (MLflow integration)
-- [x] 🆕 Feature store (Redis-based)
-- [x] 🆕 Pipeline orchestration
+- [x] Experiment tracking (MLflow integration)
+- [x] Feature store (Redis-based)
+- [x] Pipeline orchestration
 - [ ] Increase test coverage to 90%
 - [ ] Add Kubernetes deployment
 - [ ] Real-time WebSocket streaming
@@ -414,7 +427,7 @@ This project demonstrates:
 
 ## Disclaimer
 
-⚠️ **Educational & Research Use Only**
+**Educational & Research Use Only**
 
 This software is for learning and research purposes. It is NOT financial advice. Do not use this for actual trading without proper risk management and professional guidance. Past performance does not guarantee future results.
 
