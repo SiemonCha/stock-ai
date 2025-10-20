@@ -3,7 +3,7 @@ title: Stock AI Dashboard
 colorFrom: blue
 colorTo: purple
 sdk: gradio
-sdk_version: 3.50.2
+sdk_version: 4.44.0
 app_file: app.py
 pinned: false
 license: mit

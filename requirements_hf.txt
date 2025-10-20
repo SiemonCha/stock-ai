@@ -11,7 +11,9 @@ plotly>=5.0.0
 matplotlib>=3.5.0
 
 # Web Framework
-gradio>=3.0.0
+gradio==5.49.1
+huggingface_hub==0.35.3
+
 
 # Finance Data
 yfinance>=0.1.70
