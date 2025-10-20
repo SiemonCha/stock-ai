@@ -7,6 +7,7 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-passing-brightgreen.svg)
+[![Open in Spaces](https://huggingface.co/spaces/SiemonCha/stock-ai-dashboard)
 
 ## What is this?
 
